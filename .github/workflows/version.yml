@@ -24,8 +24,9 @@ jobs:
         uses: cycjimmy/semantic-release-action@v3
         id: semantic
         with:
-          dry_run: true
           semantic_version: 19.0.2
+          branches: 'develop'
+          dry_run: true
           extra_plugins: |
             @semantic-release/commit-analyzer
             @semantic-release/github
