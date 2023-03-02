@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Git configure
+        run: |
+          git config --global user.email "git-bot@crn-software.fr"
+          git config --global user.name "CRN Software"
+
       - name: Semantic Release Config - Version
         run: |
           echo '{
@@ -40,10 +45,12 @@ jobs:
       - name: Set version
         run: npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
 
-      - name: Commit
+      - name: Commit and Push
         run: |
           git add .
           git commit --amend --no-edit
           git push --force
           git tag v${{ steps.semantic.outputs.new_release_version }}
           git push --tags
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
