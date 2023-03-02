@@ -1,0 +1,13 @@
+{
+  "name": "github-actions-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Test ok\" && exit 0",
+    "build": "echo \"Build ok\" && exit 0;",
+    "deploy": "echo \"Deploy ok\" && exit 0"
+  },
+  "author": "Antoine Caron <antoine@crn-tech.fr>",
+  "license": "ISC"
+}

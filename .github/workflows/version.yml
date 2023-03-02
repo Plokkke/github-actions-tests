@@ -1,0 +1,50 @@
+name: Version
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [ main ]
+  
+jobs:
+  version-and-tag:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Semantic Release Config - Version
+        run: |
+          echo '{
+                   "tagFormat":"${version}",
+                   "plugins": [
+                      "@semantic-release/commit-analyzer",
+                      "@semantic-release/github"
+                   ]
+                }
+          '> .releaserc
+
+      - name: Semantic Release - Version
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic
+        with:
+          branches: 'main'
+          semantic_version: 19.0.2
+          extra_plugins: |
+            @semantic-release/commit-analyzer@9.0.2
+            @semantic-release/github@8.0.2
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set version
+        run: npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
+
+      - name: Commit
+        run: |
+          git add .
+          git commit --amend --no-edit
+          git push --force
+          git tag v${{ steps.semantic.outputs.new_release_version }}
+          git push --tags
