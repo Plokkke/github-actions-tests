@@ -26,11 +26,11 @@ jobs:
       - name: Semantic Release Config - Version
         run: |
           echo '{
-                   "tagFormat":"${version}",
-                   "plugins": [
-                      "@semantic-release/commit-analyzer",
-                      "@semantic-release/github"
-                   ]
+                  "dryRun": true,
+                  "plugins": [
+                    "@semantic-release/commit-analyzer",
+                    "@semantic-release/github"
+                  ]
                 }
           '> .releaserc
 
@@ -39,10 +39,6 @@ jobs:
         id: semantic
         with:
           semantic_version: 19.0.5 
-          extra_plugins: |
-            @semantic-release/commit-analyzer@9.0.2
-            @semantic-release/github@8.0.2
-          dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
