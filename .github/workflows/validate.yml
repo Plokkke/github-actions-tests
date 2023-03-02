@@ -2,11 +2,10 @@ name: Validate
 
 on:
   pull_request:
-    branches:
-      - develop
+    branches: [ develop ]
 
 jobs:
-  test:
+  Verify integrity:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
