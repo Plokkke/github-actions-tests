@@ -20,25 +20,26 @@ jobs:
           git config --global user.name "CRN Software"
 
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2
         id: semantic
-        with:
-          semantic_version: 19.0.2
-          branches: 'develop'
-          dry_run: true
-          extra_plugins: |
-            @semantic-release/commit-analyzer
-            @semantic-release/github
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          echo '{
+                  "branches": "develop",
+                  "dry_run": true,
+                  "plugins": [
+                    "@semantic-release/commit-analyzer",
+                    "@semantic-release/github"
+                  ]
+                }
+          '> .releaserc
+          echo "version=$(npx --no-install semantic-release --no-ci --dry-run | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+')" >> "$GITHUB_OUTPUT"
 
       - name: Set version
-        if: steps.semantic.outputs.new_release_version != ''
+        if: steps.semantic.outputs.version != ''
         run: |
-          npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
+          npm version ${{ steps.semantic.outputs.version }} --no-git-tag-version
 
       - name: Commit and Push
-        if: steps.semantic.outputs.new_release_version != ''
+        if: steps.semantic.outputs.version != ''
         run: |
           git add package.json package-lock.json
           git commit --amend --no-edit
