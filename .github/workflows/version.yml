@@ -4,31 +4,23 @@ on:
   pull_request:
     types: [ closed ]
     branches: [ develop ]
-  push:
-    branches: [ develop ]
   
 jobs:
   update-version:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Git configure
         run: |
-          git config --global user.email "antoine@crn-tech.fr"
-          git config --global user.name "Antoine Caron"
+          git config --global user.email "git-bot@crn-software.fr"
+          git config --global user.name "CRN Software"
           git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/Plokkke/github-actions-tests.git
-
-      - name: Semantic Release Config
-        run: |
-          echo '{
-                  "plugins": [
-                    "@semantic-release/commit-analyzer",
-                    "@semantic-release/github"
-                  ]
-                }
-          '> .releaserc
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
@@ -50,7 +42,7 @@ jobs:
 
       - name: Commit and Push
         run: |
-          git add .
+          git add package.json package-lock.json
           git commit --amend --no-edit
           git push --force origin develop
           git tag v${{ steps.semantic.outputs.new_release_version }}
