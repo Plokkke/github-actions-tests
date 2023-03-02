@@ -16,8 +16,8 @@ jobs:
 
       - name: Git configure
         run: |
-          git config --global user.email "git-bot@crn-software.fr"
-          git config --global user.name "CRN Software"
+          git config --global user.email "antoine@crn-tech.fr"
+          git config --global user.name "Antoine Caron"
           git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/Plokkke/github-actions-tests.git
 
       - name: Semantic Release Config
