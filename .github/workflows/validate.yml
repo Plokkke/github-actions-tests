@@ -5,7 +5,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  Verify integrity:
+  verify-integrity:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
