@@ -26,6 +26,9 @@ jobs:
         run: |
           echo '{
                   "dryRun": true,
+                  "branches": [
+                    "develop"
+                  ],
                   "plugins": [
                     "@semantic-release/commit-analyzer",
                     "@semantic-release/github"
