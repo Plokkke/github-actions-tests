@@ -18,7 +18,6 @@ jobs:
         run: |
           git config --global user.email "git-bot@crn-software.fr"
           git config --global user.name "CRN Software"
-          git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/Plokkke/github-actions-tests.git
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
@@ -30,8 +29,6 @@ jobs:
           extra_plugins: |
             @semantic-release/commit-analyzer
             @semantic-release/github
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Set version
         if: steps.semantic.outputs.new_release_version != ''
@@ -46,5 +43,3 @@ jobs:
           git tag v${{ steps.semantic.outputs.new_release_version }}
           git push --force origin develop
           git push --tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
