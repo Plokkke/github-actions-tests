@@ -23,8 +23,7 @@ jobs:
           git config --global user.email "git-bot@crn-software.fr"
           git config --global user.name "CRN Software"
 
-      - name: Semantic Release
-        id: semantic
+      - name: Semantic Release Config
         run: |
           echo '{
                   "branches": "develop",
@@ -34,9 +33,15 @@ jobs:
                   ]
                 }
           '> .releaserc
-          npx --no-install semantic-release --no-ci --dry-run
-          npx --no-install semantic-release --no-ci --dry-run | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+'
-          echo "version=$(npx --no-install semantic-release --no-ci --dry-run | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+')" >> "$GITHUB_OUTPUT"
+      - name: Semantic Release
+        run: npx --no-install semantic-release --no-ci --dry-run
+
+      - name: Get version
+        run: npx --no-install semantic-release --no-ci --dry-run | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+'
+
+      - name: Output version
+        id: semantic
+        run: echo "version=$(npx --no-install semantic-release --no-ci --dry-run | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+')" >> "$GITHUB_OUTPUT"
 
       - name: Set version
         if: steps.semantic.outputs.version != ''
