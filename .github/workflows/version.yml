@@ -7,7 +7,6 @@ on:
 jobs:
   update-version:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -35,11 +34,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Set version
+        if: steps.semantic.outputs.new_release_version != ''
         run: |
-          echo ${{ steps.semantic.outputs.new_release_version }}
           npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
 
       - name: Commit and Push
+        if: steps.semantic.outputs.new_release_version != ''
         run: |
           git add package.json package-lock.json
           git commit --amend --no-edit
