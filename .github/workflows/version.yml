@@ -17,6 +17,7 @@ jobs:
         run: |
           git config --global user.email "git-bot@crn-software.fr"
           git config --global user.name "CRN Software"
+          git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
 
       - name: Semantic Release Config - Version
         run: |
@@ -49,8 +50,6 @@ jobs:
         run: |
           git add .
           git commit --amend --no-edit
-          git push --force
+          git push --force origin develop
           git tag v${{ steps.semantic.outputs.new_release_version }}
           git push --tags
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
