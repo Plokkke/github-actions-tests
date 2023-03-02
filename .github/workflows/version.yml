@@ -52,6 +52,6 @@ jobs:
         run: |
           git add .
           git commit --amend --no-edit
-          git push origin develop
+          git push --force origin develop
           git tag v${{ steps.semantic.outputs.new_release_version }}
           git push --tags
